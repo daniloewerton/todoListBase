@@ -28,14 +28,14 @@ public class User {
     private String email;
     private String password;
 
-    public User(Long id, String name, String email, String password) {
+    public User(final Long id, final String name, final String email, final String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-    public static User converter(UserDTO userDTO) {
+    public static User converter(final UserDTO userDTO) {
         User user = new User();
         user.setId(userDTO.getId());
         user.setName(userDTO.getName());

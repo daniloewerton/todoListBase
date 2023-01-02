@@ -25,7 +25,7 @@ public class TaskDTO {
     @NotNull
     private Long userId;
 
-    public static TaskDTO convert(Task task) {
+    public static TaskDTO convert(final Task task) {
         TaskDTO dto = new TaskDTO();
         dto.setId(task.getId());
         dto.setDescription(task.getDescription());
