@@ -29,7 +29,7 @@ public class Task {
     @JoinColumn(name = "USER_ACTIVITY")
     private User user;
 
-    public static Task converter(TaskDTO obj) {
+    public static Task converter(final TaskDTO obj) {
         Task task = new Task();
         task.setId(obj.getId());
         task.setDescription(obj.getDescription());

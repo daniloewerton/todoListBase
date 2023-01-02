@@ -19,7 +19,7 @@ public class TaskService {
     private final TaskRepository repository;
     private final UserRepository userRepository;
 
-    public Task create(TaskDTO taskDTO) {
+    public Task create(final TaskDTO taskDTO) {
         try {
             Task task = Task.converter(taskDTO);
             task.setUser(userRepository.findById(taskDTO.getUserId()).get());
@@ -29,7 +29,7 @@ public class TaskService {
         }
     }
 
-    public Task getTask(Long id) {
+    public Task getTask(final Long id) {
         return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Object Not Found."));
     }
 
@@ -37,7 +37,7 @@ public class TaskService {
         return repository.findAll();
     }
 
-    public Task update(TaskDTO dto, Long id) {
+    public Task update(final TaskDTO dto, final Long id) {
 
         Task task = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Object Not Found."));
         task.setId(id);

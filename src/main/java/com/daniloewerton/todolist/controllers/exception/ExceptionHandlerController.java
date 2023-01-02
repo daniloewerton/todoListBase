@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class ExceptionHandlerController {
 
     @ExceptionHandler(ObjectNotFoundException.class)
-    public ResponseEntity<StandardError> objectNotFoundException(ObjectNotFoundException error, HttpServletRequest request) {
+    public ResponseEntity<StandardError> objectNotFoundException(final ObjectNotFoundException error, final HttpServletRequest request) {
         StandardError standardError = new StandardError(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(), error.getMessage(), request.getRequestURI());
         return ResponseEntity.badRequest().body(standardError);
     }

@@ -17,11 +17,11 @@ public class UserService {
 
     private final UserRepository repository;
 
-    public User create(UserDTO userDTO) {
+    public User create(final UserDTO userDTO) {
         return repository.save(User.converter(userDTO));
     }
 
-    public User getUser(Long id) {
+    public User getUser(final Long id) {
         return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Object Not Found."));
     }
 
@@ -29,7 +29,7 @@ public class UserService {
         return repository.findAll();
     }
 
-    public User update(UserDTO dto, Long id) {
+    public User update(final UserDTO dto, Long id) {
 
         User user = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Object Not Found."));
         user.setId(id);

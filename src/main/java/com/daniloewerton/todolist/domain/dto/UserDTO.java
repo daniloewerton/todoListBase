@@ -24,7 +24,7 @@ public class UserDTO {
     @NotNull
     private String password;
 
-    public static UserDTO convert(User user) {
+    public static UserDTO convert(final User user) {
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
         dto.setName(user.getName());
