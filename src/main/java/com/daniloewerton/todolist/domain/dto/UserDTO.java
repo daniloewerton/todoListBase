@@ -1,7 +1,6 @@
 package com.daniloewerton.todolist.domain.dto;
 
 import com.daniloewerton.todolist.domain.Task;
-import com.daniloewerton.todolist.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,14 +22,4 @@ public class UserDTO {
     private String email;
     @NotNull
     private String password;
-
-    public static UserDTO convert(final User user) {
-        UserDTO dto = new UserDTO();
-        dto.setId(user.getId());
-        dto.setName(user.getName());
-        dto.setEmail(user.getEmail());
-        dto.setPassword(user.getPassword());
-        dto.setTasks(user.getTasks());
-        return dto;
-    }
 }
