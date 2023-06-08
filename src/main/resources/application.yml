@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate: format_sql=true
+
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 500
+    expiration-minutes: 60
+    lettuce:
+      pool:
+        max-active: 2
+        max-idle: 1
+        min-idle: 1
+
+  swagger:
+    title: To-do List
+    description: Organize your tasks by using this application
+    contact: Danilo Ewerton
+    email: danilo.ewe@gmail.com
+    github: Github
+    github-url: https://github.com/daniloewerton

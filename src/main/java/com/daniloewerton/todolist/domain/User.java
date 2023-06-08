@@ -1,28 +1,27 @@
 package com.daniloewerton.todolist.domain;
 
 import com.daniloewerton.todolist.domain.dto.UserDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-@Table(name = "USERTABLE")
+@Table(name = "USER_TABLE")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<Task> tasks;
     @Column(unique = true)
     private String email;
