@@ -1,19 +1,20 @@
 package com.daniloewerton.todolist.domain.dto;
 
-import com.daniloewerton.todolist.domain.Task;
 import com.daniloewerton.todolist.domain.Status;
+import com.daniloewerton.todolist.domain.Task;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter
-public class TaskDTO {
+public class TaskDTO implements Serializable {
 
     private Long id;
     @NotNull

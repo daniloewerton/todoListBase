@@ -2,20 +2,21 @@ package com.daniloewerton.todolist.domain;
 
 import com.daniloewerton.todolist.domain.dto.TaskDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "ACTIVITYTABLE")
+@Table(name = "TASK_TABLE")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter
-public class Task {
+public class Task implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

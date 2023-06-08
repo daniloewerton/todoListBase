@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class ObjectNotFoundException extends RuntimeException {
+public class DataIntegratyViolation extends RuntimeException {
 
-    public ObjectNotFoundException(final String msg) {
+    public DataIntegratyViolation(final String msg) {
         super(msg);
     }
 }
