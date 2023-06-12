@@ -21,15 +21,16 @@ public class UserService {
 
     private final UserRepository repository;
 
-    public Optional<User> findByEmail(final String email) {
-        return repository.findByEmail(email);
+    public boolean findByEmail(final String email) {
+        Optional<User> user = repository.findByEmail(email);
+        return user.isPresent();
     }
 
     public User create(final UserDTO userDTO) {
-        final Optional<User> user = findByEmail(userDTO.getEmail());
 
-        if (user.isPresent()) {
-            throw new DataIntegratyViolation("Email already exists");
+        final boolean userExists = findByEmail(userDTO.getEmail());
+        if (Boolean.TRUE.equals(userExists)) {
+            throw new DataIntegratyViolation("Email in use");
         }
         return repository.save(User.converter(userDTO));
     }
@@ -42,14 +43,21 @@ public class UserService {
                 .orElseThrow(() -> new ObjectNotFoundException("Object Not Found."));
     }
 
-    public User update(final UserDTO dto, Long id) {
+    public User update(final UserDTO userDTO, final Long id) {
 
         final User user = repository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Object Not Found."));
 
+        final boolean userExists = findByEmail(userDTO.getEmail());
+
+        if (Boolean.TRUE.equals(userExists)) {
+            throw new DataIntegratyViolation("Email already exists");
+        }
+
         user.setId(id);
-        user.setName(dto.getName());
-        user.setTasks(dto.getTasks());
+        user.setName(userDTO.getName());
+        user.setTasks(userDTO.getTasks());
+        user.setEmail(userDTO.getEmail());
         return user;
     }
 

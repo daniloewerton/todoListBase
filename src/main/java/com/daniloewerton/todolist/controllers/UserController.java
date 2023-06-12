@@ -20,6 +20,8 @@ import java.net.URI;
 @Tag(name = "Users")
 public class UserController {
 
+    private static final String ID = "/{id}";
+
     private final UserService service;
 
     @PostMapping("/")
@@ -30,21 +32,21 @@ public class UserController {
         return ResponseEntity.created(uri).build();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(ID)
     @Operation(summary = "get a specific user by its id")
     public ResponseEntity<UserDtoResponse> getUser(@PathVariable final Long id) {
         final User user = service.getUser(id);
         return ResponseEntity.ok().body(UserDtoResponse.convert(user));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(ID)
     @Operation(summary = "update an user by its id")
-    public ResponseEntity<UserDtoResponse> update(@RequestBody final UserDTO dto, @PathVariable final Long id) {
+    public ResponseEntity<UserDtoResponse> update(@RequestBody @Valid final UserDTO dto, @PathVariable final Long id) {
         final User user = service.update(dto, id);
         return ResponseEntity.ok().body(UserDtoResponse.convert(user));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(ID)
     @Operation(summary = "evict user's cache by its id")
     public ResponseEntity<Void> evictCache(@PathVariable final Long id) {
         service.evictCache(id);

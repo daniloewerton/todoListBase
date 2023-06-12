@@ -2,6 +2,7 @@ package com.daniloewerton.todolist.domain.dto;
 
 import com.daniloewerton.todolist.domain.Status;
 import com.daniloewerton.todolist.domain.Task;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,13 +18,13 @@ import java.time.LocalDate;
 public class TaskDTO implements Serializable {
 
     private Long id;
-    @NotNull
+    @NotBlank(message = "Mandatory field")
     private String description;
-    @NotNull
+    @NotNull(message = "Mandatory field")
     private LocalDate deadline;
-    @NotNull
+    @NotNull(message = "Mandatory field")
     private Status status;
-    @NotNull
+    @NotNull(message = "Mandatory field")
     private Long userId;
 
     public static TaskDTO convert(final Task task) {

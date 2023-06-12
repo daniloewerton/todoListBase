@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 @Tag(name = "Tasks")
 public class TaskController {
 
+    private static final String ID = "/{id}";
+
     private final TaskService service;
 
     @PostMapping
@@ -31,31 +33,31 @@ public class TaskController {
         return ResponseEntity.created(uri).build();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(ID)
     @Operation(summary = "get a specific task by its id")
     public ResponseEntity<TaskDTO> getTask(@PathVariable final Long id) {
         final Task task = service.getTask(id);
         return ResponseEntity.ok().body(TaskDTO.convert(task));
     }
 
-    @GetMapping("/{userId}/users")
+    @GetMapping(ID + "/users")
     @Operation(summary = "get all tasks by user")
-    public ResponseEntity<List<TaskDTO>> getAllByUser(@PathVariable final Long userId) {
-        final List<TaskDTO> list = service.getAllByUser(userId).stream().map(TaskDTO::convert).collect(Collectors.toList());
+    public ResponseEntity<List<TaskDTO>> getAllByUser(@PathVariable final Long id) {
+        final List<TaskDTO> list = service.getAllByUser(id).stream().map(TaskDTO::convert).collect(Collectors.toList());
         return ResponseEntity.ok().body(list);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(ID)
     @Operation(summary = "update a specific task by its id")
-    public ResponseEntity<TaskDTO> update(@RequestBody final TaskDTO dto, @PathVariable final Long id) {
+    public ResponseEntity<TaskDTO> update(@RequestBody final @Valid TaskDTO dto, @PathVariable final Long id) {
         final Task task = service.update(dto, id);
         return ResponseEntity.ok().body(TaskDTO.convert(task));
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping(ID)
     @Operation(summary = "evict user's task cache")
-    public ResponseEntity<Void> evictCaches(@PathVariable final Long userId) {
-        service.evictCache(userId);
+    public ResponseEntity<Void> evictCache(@PathVariable final Long id) {
+        service.evictCache(id);
         return ResponseEntity.noContent().build();
     }
 }

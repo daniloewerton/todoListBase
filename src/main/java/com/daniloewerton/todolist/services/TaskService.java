@@ -52,8 +52,7 @@ public class TaskService {
 
     public Task update(final TaskDTO dto, final Long id) {
 
-        final Task task = repository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("Object Not Found."));
+        final Task task = getTask(id);
 
         task.setId(id);
         task.setDescription(dto.getDescription());

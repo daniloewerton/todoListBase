@@ -1,7 +1,7 @@
 package com.daniloewerton.todolist.domain.dto;
 
 import com.daniloewerton.todolist.domain.Task;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,11 +16,11 @@ import java.util.Set;
 public class UserDTO implements Serializable {
 
     private Long id;
-    @NotNull
+    @NotBlank(message = "Mandatory field")
     private String name;
     private Set<Task> tasks;
-    @NotNull
+    @NotBlank(message = "Mandatory field")
     private String email;
-    @NotNull
+    @NotBlank(message = "Mandatory field")
     private String password;
 }
