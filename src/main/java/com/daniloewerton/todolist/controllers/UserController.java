@@ -2,6 +2,7 @@ package com.daniloewerton.todolist.controllers;
 
 import com.daniloewerton.todolist.domain.User;
 import com.daniloewerton.todolist.domain.dto.UserDTO;
+import com.daniloewerton.todolist.domain.dto.request.UserDtoRequest;
 import com.daniloewerton.todolist.domain.dto.response.UserDtoResponse;
 import com.daniloewerton.todolist.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,7 +42,7 @@ public class UserController {
 
     @PutMapping(ID)
     @Operation(summary = "update an user by its id")
-    public ResponseEntity<UserDtoResponse> update(@RequestBody @Valid final UserDTO dto, @PathVariable final Long id) {
+    public ResponseEntity<UserDtoResponse> update(@RequestBody @Valid final UserDtoRequest dto, @PathVariable final Long id) {
         final User user = service.update(dto, id);
         return ResponseEntity.ok().body(UserDtoResponse.convert(user));
     }

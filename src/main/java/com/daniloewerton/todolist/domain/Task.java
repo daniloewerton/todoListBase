@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "TASK_TABLE")
+@Table(name = "tb_task")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter

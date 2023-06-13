@@ -1,8 +1,10 @@
 package com.daniloewerton.todolist.services;
 
 import com.daniloewerton.todolist.config.CacheConfig;
+import com.daniloewerton.todolist.domain.Role;
 import com.daniloewerton.todolist.domain.User;
 import com.daniloewerton.todolist.domain.dto.UserDTO;
+import com.daniloewerton.todolist.domain.dto.request.UserDtoRequest;
 import com.daniloewerton.todolist.repositories.UserRepository;
 import com.daniloewerton.todolist.services.exceptions.DataIntegratyViolation;
 import com.daniloewerton.todolist.services.exceptions.ObjectNotFoundException;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -43,7 +46,7 @@ public class UserService {
                 .orElseThrow(() -> new ObjectNotFoundException("Object Not Found."));
     }
 
-    public User update(final UserDTO userDTO, final Long id) {
+    public User update(final UserDtoRequest userDTO, final Long id) {
 
         final User user = repository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Object Not Found."));
@@ -57,7 +60,11 @@ public class UserService {
         user.setId(id);
         user.setName(userDTO.getName());
         user.setTasks(userDTO.getTasks());
-        user.setEmail(userDTO.getEmail());
+        user.setEmail(user.getEmail());
+        user.setRoles(userDTO.getRoles()
+                .stream()
+                .map(Role::converter)
+                .collect(Collectors.toSet()));
         return user;
     }
 
