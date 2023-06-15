@@ -11,6 +11,7 @@ import com.daniloewerton.todolist.services.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository repository;
+    private BCryptPasswordEncoder encoder;
 
     public boolean findByEmail(final String email) {
         Optional<User> user = repository.findByEmail(email);

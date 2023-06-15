@@ -31,3 +31,7 @@ spring:
     email: danilo.ewe@gmail.com
     github: Github
     github-url: https://github.com/daniloewerton
+
+Jwt:
+  secret: StringUsadaParaGerarOToken
+  expiration: 180000
