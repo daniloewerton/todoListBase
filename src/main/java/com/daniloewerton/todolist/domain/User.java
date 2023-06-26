@@ -43,6 +43,13 @@ public class User implements Serializable {
         this.roles = roles;
     }
 
+    public User(String email, String password, Set<Role> roles) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
     public static User converter(final UserDTO userDTO) {
         User user = new User();
         user.setId(userDTO.getId());

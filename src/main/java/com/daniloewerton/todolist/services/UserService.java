@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository repository;
-    private BCryptPasswordEncoder encoder;
+    private final BCryptPasswordEncoder encoder;
 
     public boolean findByEmail(final String email) {
         Optional<User> user = repository.findByEmail(email);
@@ -37,6 +37,7 @@ public class UserService {
         if (Boolean.TRUE.equals(userExists)) {
             throw new DataIntegratyViolation("Email in use");
         }
+        userDTO.setPassword(encoder.encode(userDTO.getPassword()));
         return repository.save(User.converter(userDTO));
     }
 

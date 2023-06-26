@@ -1,80 +1,62 @@
 package com.daniloewerton.todolist.config;
 
-import com.daniloewerton.todolist.security.JWTUtil;
-import com.daniloewerton.todolist.security.JwtAuthenticationFilter;
-import com.daniloewerton.todolist.security.JwtAuthorizationFilter;
+import com.daniloewerton.todolist.security.AuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableMethodSecurity
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private static final String[] AUTH_WHITE_LIST = {
+    private static final String[] AUTH_ALLOWED_LIST_GET = {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/v2/api-docs/**",
             "/swagger-resources/**"
     };
 
-    private final JWTUtil jwtUtil;
-    private final AuthenticationConfiguration configuration;
-    private final UserDetailsService userDetailsService;
+    private static final String[] AUTH_DENIED_LIST_POST = {
+            "/auth/login",
+    };
+
+    private final AuthenticationFilter authenticationFilter;
 
     @Bean
     @SneakyThrows
-    public SecurityFilterChain filterChain(final HttpSecurity http) {
-        return http.authorizeHttpRequests()
-                .requestMatchers(PathRequest.toH2Console())
-                .permitAll()
-                .requestMatchers(AUTH_WHITE_LIST)
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .headers()
-                .frameOptions()
-                .disable()
-                .and()
-                .cors()
-                .and()
-                .csrf()
-                .disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilter(new JwtAuthenticationFilter(configuration.getAuthenticationManager(), jwtUtil))
-                .addFilter(new JwtAuthorizationFilter(configuration.getAuthenticationManager(), jwtUtil, userDetailsService))
+    public SecurityFilterChain securityFilterChain(final HttpSecurity httpSecurity) {
+        return  httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, AUTH_DENIED_LIST_POST).permitAll()
+                        .requestMatchers(HttpMethod.GET, AUTH_ALLOWED_LIST_GET).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
+                        .anyRequest().authenticated())
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
-        configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+    @SneakyThrows
+    public AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration) {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
-    public BCryptPasswordEncoder encoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

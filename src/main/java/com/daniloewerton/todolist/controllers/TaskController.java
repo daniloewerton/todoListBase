@@ -29,7 +29,7 @@ public class TaskController {
     @Operation(summary = "create a new task")
     public ResponseEntity<TaskDTO> create(@RequestBody @Valid final TaskDTO dto) {
         final Task task = service.create(dto);
-        final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(task.getId()).toUri();
+        final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(ID).buildAndExpand(task.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
