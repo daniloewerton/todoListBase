@@ -2,7 +2,7 @@ package com.daniloewerton.todolist.controllers;
 
 import com.daniloewerton.todolist.domain.dto.CredentialDTO;
 import com.daniloewerton.todolist.domain.dto.response.AuthResponse;
-import com.daniloewerton.todolist.services.AuthenticationService;
+import com.daniloewerton.todolist.security.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -22,7 +22,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    @Operation(summary = "sign up in this application")
+    @Operation(summary = "login this application")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid final CredentialDTO data){
         return ResponseEntity.ok(authenticationService.authenticate(data));
     }

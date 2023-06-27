@@ -1,9 +1,7 @@
-package com.daniloewerton.todolist.services;
+package com.daniloewerton.todolist.security;
 
 import com.daniloewerton.todolist.domain.dto.CredentialDTO;
 import com.daniloewerton.todolist.domain.dto.response.AuthResponse;
-import com.daniloewerton.todolist.security.TokenUtils;
-import com.daniloewerton.todolist.security.UserSS;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
