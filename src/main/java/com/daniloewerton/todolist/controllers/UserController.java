@@ -29,7 +29,7 @@ public class UserController {
     @Operation(summary = "create a new user")
     public ResponseEntity<UserDtoResponse> create(@RequestBody @Valid final UserDTO dto) {
         final User user = service.create(dto);
-        final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
+        final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(ID).buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 

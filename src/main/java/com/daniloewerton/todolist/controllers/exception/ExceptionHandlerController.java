@@ -37,7 +37,7 @@ public class ExceptionHandlerController {
         error.setError("Validation Exception");
         error.setMessage(exception.getMessage());
 
-        for (FieldError f : exception.getBindingResult().getFieldErrors()) {
+        for (final FieldError f : exception.getBindingResult().getFieldErrors()) {
             error.addError(f.getField(), f.getDefaultMessage());
         }
 

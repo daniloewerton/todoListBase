@@ -8,6 +8,7 @@ import com.daniloewerton.todolist.repositories.RoleRepository;
 import com.daniloewerton.todolist.repositories.TaskRepository;
 import com.daniloewerton.todolist.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,14 +22,15 @@ public class DatabaseService {
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
     private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder encoder;
 
     public void insertDB() {
 
         final Role r1 = new Role(null, "ADMIN");
         final Role r2 = new Role(null, "USER");
 
-        final User u1 = new User(null, "Danilo Ewerton", "ewerton@email.com", "123", Set.of(r1, r2));
-        final User u2 = new User(null, "Mariazinha", "mariazinha@email.com", "321", Set.of(r2));
+        final User u1 = new User(null, "Danilo Ewerton", "ewerton@email.com", encoder.encode("123"), Set.of(r1, r2));
+        final User u2 = new User(null, "Mariazinha", "mariazinha@email.com", encoder.encode("321"), Set.of(r2));
 
         final Task a1 = new Task(null, "Ride bike", LocalDate.parse("2022-10-25"), Status.TODO, u1);
         final Task a2 = new Task(null, "Go to the gym", LocalDate.parse("2022-10-28"), Status.TODO, u1);
