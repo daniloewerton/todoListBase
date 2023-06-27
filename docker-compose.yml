@@ -9,6 +9,18 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass redis
     volumes:
       - cache:/data
+
+  db:
+    container_name: todolist
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: tododatabase
+      POSTGRES_USER: todolist
+      POSTGRES_PASSWORD: todolist
+    ports:
+      - "5433:5432"
+
 volumes:
   cache:
     driver: local
