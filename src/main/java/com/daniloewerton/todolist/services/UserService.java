@@ -7,9 +7,8 @@ import com.daniloewerton.todolist.domain.dto.request.UserDtoRequest;
 import com.daniloewerton.todolist.domain.dto.response.UserDtoResponse;
 import com.daniloewerton.todolist.infra.mapper.RoleMapper;
 import com.daniloewerton.todolist.infra.mapper.UserMapper;
-import com.daniloewerton.todolist.repositories.UserRepository;
 import com.daniloewerton.todolist.infra.security.AuthenticationService;
-import com.daniloewerton.todolist.services.exceptions.DataIntegrityViolation;
+import com.daniloewerton.todolist.repositories.UserRepository;
 import com.daniloewerton.todolist.services.exceptions.ForbiddenException;
 import com.daniloewerton.todolist.services.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +31,6 @@ public class UserService {
     private final BCryptPasswordEncoder encoder;
     private final AuthenticationService authenticationService;
 
-
     @Cacheable(cacheManager = CacheConfig.CACHE_MANAGER,
                 value = CacheConfig.CACHE_USER,
                 key = "#id")
@@ -41,19 +39,13 @@ public class UserService {
         return userMapper.toUserResponse(user.orElseThrow(() -> new ObjectNotFoundException("Object Not Found.")));
     }
 
-    public Optional<User> findByEmail(final String email) {
-        return repository.findByEmail(email);
-    }
-
     public User create(final UserDTO userDTO) {
 
-        final Optional<User> optional = findByEmail(userDTO.getEmail());
-
-        if (optional.isEmpty()) {
+        if (authenticationService.isAdmin()) {
             userDTO.setPassword(encoder.encode(userDTO.getPassword()));
             return repository.save(userMapper.toUser(userDTO));
         }
-        throw new DataIntegrityViolation("Email already in use");
+        throw new ForbiddenException("User not allowed to create a new user.");
     }
 
     public UserDtoResponse update(final UserDtoRequest userDTO, final Long userId) {
@@ -69,7 +61,7 @@ public class UserService {
             repository.save(userMapper.toUser(userDTO));
             return userMapper.toUserResponse(userDTO);
         }
-        throw new ForbiddenException("User not authenticated.");
+        throw new ForbiddenException("User not authenticated or not allowed.");
     }
 
     @CacheEvict(cacheManager = CacheConfig.CACHE_MANAGER,
