@@ -28,7 +28,7 @@ public class SecurityConfig {
             "/swagger-resources/**"
     };
 
-    private static final String[] AUTH_DENIED_LIST_POST = {
+    private static final String[] AUTH_ALLOWED_LIST_POST = {
             "/auth/login",
     };
 
@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, AUTH_DENIED_LIST_POST).permitAll()
+                        .requestMatchers(HttpMethod.POST, AUTH_ALLOWED_LIST_POST).permitAll()
                         .requestMatchers(HttpMethod.GET, AUTH_ALLOWED_LIST_GET).permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
                         .anyRequest().authenticated())
