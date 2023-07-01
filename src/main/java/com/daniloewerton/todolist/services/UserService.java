@@ -10,6 +10,7 @@ import com.daniloewerton.todolist.infra.mapper.UserMapper;
 import com.daniloewerton.todolist.repositories.UserRepository;
 import com.daniloewerton.todolist.infra.security.AuthenticationService;
 import com.daniloewerton.todolist.services.exceptions.DataIntegrityViolation;
+import com.daniloewerton.todolist.services.exceptions.ForbiddenException;
 import com.daniloewerton.todolist.services.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -55,17 +56,20 @@ public class UserService {
         throw new DataIntegrityViolation("Email already in use");
     }
 
-    public UserDtoResponse update(final UserDtoRequest userDTO) {
+    public UserDtoResponse update(final UserDtoRequest userDTO, final Long userId) {
 
         final Optional<User> authenticatedUser = authenticationService.getAuthenticatedUser();
 
-        userDTO.setId(authenticatedUser.get().getId());
-        userDTO.setName(userDTO.getName());
-        userDTO.setEmail(userDTO.getEmail());
-        userDTO.setPassword(encoder.encode(userDTO.getPassword()));
-        userDTO.setRoles(roleMapper.toRole(authenticatedUser.get().getRoles()));
-        repository.save(userMapper.toUser(userDTO));
-        return userMapper.toUserResponse(userDTO);
+        if (authenticatedUser.isPresent() && authenticatedUser.get().getId().equals(userId)) {
+            userDTO.setId(userId);
+            userDTO.setName(userDTO.getName());
+            userDTO.setEmail(userDTO.getEmail());
+            userDTO.setPassword(encoder.encode(userDTO.getPassword()));
+            userDTO.setRoles(roleMapper.toRole(authenticatedUser.get().getRoles()));
+            repository.save(userMapper.toUser(userDTO));
+            return userMapper.toUserResponse(userDTO);
+        }
+        throw new ForbiddenException("User not authenticated.");
     }
 
     @CacheEvict(cacheManager = CacheConfig.CACHE_MANAGER,

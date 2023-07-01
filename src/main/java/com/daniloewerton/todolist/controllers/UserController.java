@@ -41,9 +41,8 @@ public class UserController {
 
     @PutMapping(ID)
     @Operation(summary = "update an user by its id")
-    public ResponseEntity<UserDtoResponse> update(@RequestBody @Valid final UserDtoRequest request) {
-        final UserDtoResponse user = service.update(request);
-        return ResponseEntity.ok().body(user);
+    public ResponseEntity<UserDtoResponse> update(@RequestBody @Valid final UserDtoRequest request, @PathVariable final Long id) {
+        return ResponseEntity.ok().body(service.update(request, id));
     }
 
     @DeleteMapping(ID)
