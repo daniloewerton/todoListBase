@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class DataIntegratyViolation extends RuntimeException {
+public class DataIntegrityViolation extends RuntimeException {
 
-    public DataIntegratyViolation(final String msg) {
+    public DataIntegrityViolation(final String msg) {
         super(msg);
     }
 }

@@ -1,17 +1,13 @@
 package com.daniloewerton.todolist.domain;
 
-import com.daniloewerton.todolist.domain.dto.UserDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
+@Builder
 @Entity
 @Table(name = "tb_user")
 @NoArgsConstructor
@@ -41,26 +37,5 @@ public class User implements Serializable {
         this.email = email;
         this.password = password;
         this.roles = roles;
-    }
-
-    public User(String email, String password, Set<Role> roles) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-    }
-
-    public static User converter(final UserDTO userDTO) {
-        User user = new User();
-        user.setId(userDTO.getId());
-        user.setName(userDTO.getName());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
-        user.setTasks(userDTO.getTasks());
-        user.setRoles(userDTO.getRoles()
-                .stream()
-                .map(Role::converter)
-                .collect(Collectors.toSet()));
-        return user;
     }
 }

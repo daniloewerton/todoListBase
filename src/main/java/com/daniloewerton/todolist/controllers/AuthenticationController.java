@@ -1,8 +1,8 @@
 package com.daniloewerton.todolist.controllers;
 
-import com.daniloewerton.todolist.domain.dto.CredentialDTO;
+import com.daniloewerton.todolist.domain.dto.request.CredentialDTO;
 import com.daniloewerton.todolist.domain.dto.response.AuthResponse;
-import com.daniloewerton.todolist.security.AuthenticationService;
+import com.daniloewerton.todolist.infra.security.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

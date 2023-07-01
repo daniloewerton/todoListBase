@@ -1,6 +1,7 @@
 package com.daniloewerton.todolist.controllers.exception;
 
-import com.daniloewerton.todolist.services.exceptions.DataIntegratyViolation;
+import com.daniloewerton.todolist.services.exceptions.DataIntegrityViolation;
+import com.daniloewerton.todolist.services.exceptions.ForbiddenException;
 import com.daniloewerton.todolist.services.exceptions.ObjectNotFoundException;
 import com.daniloewerton.todolist.services.exceptions.ValidationError;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,13 +20,19 @@ public class ExceptionHandlerController {
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<StandardError> objectNotFoundException(final ObjectNotFoundException exception, final HttpServletRequest request) {
         final StandardError standardError = new StandardError(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(), "Object Not Found" ,exception.getMessage(), request.getRequestURI());
-        return ResponseEntity.badRequest().body(standardError);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(standardError);
     }
 
-    @ExceptionHandler(DataIntegratyViolation.class)
-    public ResponseEntity<StandardError> objectExists(final DataIntegratyViolation exception, final HttpServletRequest request) {
-        final StandardError standardError = new StandardError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), "Data Integraty violation", exception.getMessage(), request.getRequestURI());
-        return ResponseEntity.badRequest().body(standardError);
+    @ExceptionHandler(DataIntegrityViolation.class)
+    public ResponseEntity<StandardError> objectExists(final DataIntegrityViolation exception, final HttpServletRequest request) {
+        final StandardError standardError = new StandardError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), "Bad Request", exception.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(standardError);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<StandardError> forbidden(final ForbiddenException exception, final HttpServletRequest request) {
+        final StandardError standardError = new StandardError(LocalDateTime.now(), HttpStatus.FORBIDDEN.value(), "Forbidden", exception.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN.value()).body(standardError);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

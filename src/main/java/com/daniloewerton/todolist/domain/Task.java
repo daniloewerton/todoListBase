@@ -1,6 +1,5 @@
 package com.daniloewerton.todolist.domain;
 
-import com.daniloewerton.todolist.domain.dto.TaskDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,13 +28,4 @@ public class Task implements Serializable {
     @JsonIgnore
     @JoinColumn(name = "USER_ACTIVITY")
     private User user;
-
-    public static Task converter(final TaskDTO obj) {
-        Task task = new Task();
-        task.setId(obj.getId());
-        task.setDescription(obj.getDescription());
-        task.setDeadline(obj.getDeadline());
-        task.setStatus(obj.getStatus());
-        return task;
-    }
 }

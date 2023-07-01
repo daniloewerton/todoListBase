@@ -1,15 +1,6 @@
 version: '3.8'
 
 services:
-  cache:
-    image: redis:6.2-alpine
-    restart: always
-    ports:
-      - '6379:6379'
-    command: redis-server --save 20 1 --loglevel warning --requirepass redis
-    volumes:
-      - cache:/data
-
   db:
     container_name: todolist
     image: postgres
@@ -20,6 +11,14 @@ services:
       POSTGRES_PASSWORD: todolist
     ports:
       - "5433:5432"
+
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - cache:/data
 
 volumes:
   cache:

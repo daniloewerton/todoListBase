@@ -1,4 +1,4 @@
-package com.daniloewerton.todolist.domain.dto;
+package com.daniloewerton.todolist.domain.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
