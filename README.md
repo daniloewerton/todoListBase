@@ -9,7 +9,9 @@ This project is an API built using Java, Spring Boot, Spring Security, JWT, Swag
 
 This application was developed by me for studying and documentation purposes.
 
-## Requiriments
+![diagram](https://github.com/daniloewerton/todoListBase/assets/76541826/ae281876-a425-45e1-8316-6a5387ba095c)
+
+## Requirements
 
 - JDK 17;
 - Docker.
