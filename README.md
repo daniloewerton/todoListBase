@@ -14,21 +14,24 @@ This application was developed by me for studying and documentation purposes.
 ## Requirements
 
 - JDK 17;
-- Docker.
+- Docker;
+- Dbeaver (or any client SQL software)
+- Redis Insight.
 
 ## Instalation
 
-1ª - Clone the repository
+1ª - Clone the repository;
 
 ```
 git clone https://github.com/daniloewerton/todoListBase.git
 ```
 
-2ª - Install dependencies with maven
+2ª - Install dependencies with maven;
 
-4ª - Run the 'docker compose up' command in project root directory
+4ª - Run the 'docker compose up' command in project root directory;
 
-4ª - Run the project using an Java IDE
+4ª - Run the project using an Java IDE.
+
 The app will be up in http://localhost:8080
 
 The swagger UI documentation will be UP in http://localhost:8080/swagger-ui/index.html
