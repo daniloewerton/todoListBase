@@ -2,7 +2,7 @@ package com.daniloewerton.todolist.services;
 
 import com.daniloewerton.todolist.domain.User;
 import com.daniloewerton.todolist.repositories.UserRepository;
-import com.daniloewerton.todolist.security.UserSS;
+import com.daniloewerton.todolist.infra.security.UserSS;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.core.userdetails.UserDetails;

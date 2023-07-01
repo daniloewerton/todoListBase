@@ -1,4 +1,4 @@
-package com.daniloewerton.todolist.security;
+package com.daniloewerton.todolist.infra.security;
 
 import com.daniloewerton.todolist.domain.Role;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,6 +1,6 @@
 package com.daniloewerton.todolist.config;
 
-import com.daniloewerton.todolist.security.AuthenticationFilter;
+import com.daniloewerton.todolist.infra.security.AuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;

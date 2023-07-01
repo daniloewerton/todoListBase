@@ -1,12 +1,15 @@
 package com.daniloewerton.todolist.services;
 
 import com.daniloewerton.todolist.config.CacheConfig;
-import com.daniloewerton.todolist.domain.Role;
 import com.daniloewerton.todolist.domain.User;
 import com.daniloewerton.todolist.domain.dto.UserDTO;
 import com.daniloewerton.todolist.domain.dto.request.UserDtoRequest;
+import com.daniloewerton.todolist.domain.dto.response.UserDtoResponse;
+import com.daniloewerton.todolist.infra.mapper.RoleMapper;
+import com.daniloewerton.todolist.infra.mapper.UserMapper;
 import com.daniloewerton.todolist.repositories.UserRepository;
-import com.daniloewerton.todolist.services.exceptions.DataIntegratyViolation;
+import com.daniloewerton.todolist.infra.security.AuthenticationService;
+import com.daniloewerton.todolist.services.exceptions.DataIntegrityViolation;
 import com.daniloewerton.todolist.services.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -16,63 +19,57 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
 
+    private final UserMapper userMapper;
+    private final RoleMapper roleMapper;
     private final UserRepository repository;
     private final BCryptPasswordEncoder encoder;
+    private final AuthenticationService authenticationService;
 
-    public boolean findByEmail(final String email) {
-        Optional<User> user = repository.findByEmail(email);
-        return user.isPresent();
+
+    @Cacheable(cacheManager = CacheConfig.CACHE_MANAGER,
+                value = CacheConfig.CACHE_USER,
+                key = "#id")
+    public UserDtoResponse findById(final Long id) {
+        Optional<User> user = repository.findById(id);
+        return userMapper.toUserResponse(user.orElseThrow(() -> new ObjectNotFoundException("Object Not Found.")));
+    }
+
+    public Optional<User> findByEmail(final String email) {
+        return repository.findByEmail(email);
     }
 
     public User create(final UserDTO userDTO) {
 
-        final boolean userExists = findByEmail(userDTO.getEmail());
-        if (Boolean.TRUE.equals(userExists)) {
-            throw new DataIntegratyViolation("Email in use");
+        final Optional<User> optional = findByEmail(userDTO.getEmail());
+
+        if (optional.isEmpty()) {
+            userDTO.setPassword(encoder.encode(userDTO.getPassword()));
+            return repository.save(userMapper.toUser(userDTO));
         }
+        throw new DataIntegrityViolation("Email already in use");
+    }
+
+    public UserDtoResponse update(final UserDtoRequest userDTO) {
+
+        final Optional<User> authenticatedUser = authenticationService.getAuthenticatedUser();
+
+        userDTO.setId(authenticatedUser.get().getId());
+        userDTO.setName(userDTO.getName());
+        userDTO.setEmail(userDTO.getEmail());
         userDTO.setPassword(encoder.encode(userDTO.getPassword()));
-        return repository.save(User.converter(userDTO));
-    }
-
-    @Cacheable(cacheManager = CacheConfig.CACHE_MANAGER,
-            value = CacheConfig.CACHE_USER,
-            key = "#id")
-    public User getUser(final Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("Object Not Found."));
-    }
-
-    public User update(final UserDtoRequest userDTO, final Long id) {
-
-        final User user = repository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("Object Not Found."));
-
-        final boolean userExists = findByEmail(userDTO.getEmail());
-
-        if (Boolean.TRUE.equals(userExists)) {
-            throw new DataIntegratyViolation("Email already exists");
-        }
-
-        user.setId(id);
-        user.setName(userDTO.getName());
-        user.setTasks(userDTO.getTasks());
-        user.setEmail(user.getEmail());
-        user.setRoles(userDTO.getRoles()
-                .stream()
-                .map(Role::converter)
-                .collect(Collectors.toSet()));
-        return user;
+        userDTO.setRoles(roleMapper.toRole(authenticatedUser.get().getRoles()));
+        repository.save(userMapper.toUser(userDTO));
+        return userMapper.toUserResponse(userDTO);
     }
 
     @CacheEvict(cacheManager = CacheConfig.CACHE_MANAGER,
-            value = CacheConfig.CACHE_USER,
-            key = "#id")
+                value = CacheConfig.CACHE_USER,
+                key = "#id")
     public void evictCache(final Long id) {}
 }

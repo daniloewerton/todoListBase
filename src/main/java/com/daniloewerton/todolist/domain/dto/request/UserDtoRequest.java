@@ -29,7 +29,9 @@ public class UserDtoRequest implements Serializable {
     private String name;
     @JsonIgnore
     private Set<Task> tasks;
+    @NotBlank(message = "Mandatory field")
     private String email;
+    private String password;
     @NotEmpty(message = "Mandatory field")
     @Size(min = 1, max = 2, message = "Unexpected amount of roles")
     private Set<RoleDTO> roles = new HashSet<>();

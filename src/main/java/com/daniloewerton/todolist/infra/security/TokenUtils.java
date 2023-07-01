@@ -1,4 +1,4 @@
-package com.daniloewerton.todolist.security;
+package com.daniloewerton.todolist.infra.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
