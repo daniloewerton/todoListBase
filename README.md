@@ -13,7 +13,7 @@ This application was developed by me for studying and documentation purposes.
 
 ## Requirements
 
-- JDK 17;
+- JDK 21;
 - Docker;
 - Dbeaver (or any client SQL software)
 - Redis Insight.
@@ -30,7 +30,7 @@ git clone https://github.com/daniloewerton/todoListBase.git
 
 4ª - Run the 'docker compose up' command in project root directory;
 
-4ª - Run the project using an Java IDE.
+4ª - Run the project using a Java IDE.
 
 The app will be up in http://localhost:8080
 

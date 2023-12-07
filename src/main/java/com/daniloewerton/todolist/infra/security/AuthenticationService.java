@@ -44,11 +44,9 @@ public class AuthenticationService {
         if (userOptional.isPresent()) {
             final User user = userOptional.get();
             final Set<Role> roles = user.getRoles();
-            for (final Role role : roles) {
-                if (role.getAuthority().equals("ADMIN")) {
-                    return true;
-                }
-            }
+            return roles.stream()
+                    .allMatch(role -> role.getAuthority()
+                            .equals("ADMIN"));
         }
         return false;
     }

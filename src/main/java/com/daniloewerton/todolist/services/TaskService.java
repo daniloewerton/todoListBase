@@ -76,9 +76,9 @@ public class TaskService {
                 final Task task = taskMapper.toTask(getTask(taskId));
 
                 task.setId(taskId);
-                task.setDescription(dto.getDescription());
-                task.setDeadline(dto.getDeadline());
-                task.setStatus(dto.getStatus());
+                task.setDescription(dto.description());
+                task.setDeadline(dto.deadline());
+                task.setStatus(dto.status());
                 task.setUser(authenticatedUser.get());
                 return taskMapper.toTaskDTO(repository.save(task));
             }

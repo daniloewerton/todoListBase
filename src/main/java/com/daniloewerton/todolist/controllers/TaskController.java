@@ -27,7 +27,7 @@ public class TaskController {
     @Operation(summary = "create a new task")
     public ResponseEntity<TaskDTO> create(@RequestBody @Valid final TaskDTO request) {
         final TaskDTO taskDTO = service.create(request);
-        final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(ID).buildAndExpand(taskDTO.getId()).toUri();
+        final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(ID).buildAndExpand(taskDTO.id()).toUri();
         return ResponseEntity.created(uri).build();
     }
 

@@ -1,11 +1,5 @@
 package com.daniloewerton.todolist.domain.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+public record AuthResponse (String token) {
 
-@Data
-@AllArgsConstructor
-public class AuthResponse {
-
-    private String token;
 }
