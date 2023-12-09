@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/tododatabase
+    username: todolist
+    password: todolist
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: create
+
+  redis:
+    host: localhost
+    port: 6380
+    timeout: 500
+    expiration-minutes: 60
+    lettuce:
+      pool:
+        max-active: 2
+        max-idle: 1
+        min-idle: 1
