@@ -51,4 +51,9 @@ public class UserController {
         service.evictCache(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/verCache")
+    public ResponseEntity<String> verCache() {
+        return ResponseEntity.ok(service.verifyCacheExists());
+    }
 }

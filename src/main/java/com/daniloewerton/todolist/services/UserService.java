@@ -14,6 +14,7 @@ import com.daniloewerton.todolist.services.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,7 @@ public class UserService {
     private final UserRepository repository;
     private final BCryptPasswordEncoder encoder;
     private final AuthenticationService authenticationService;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Cacheable(cacheManager = CacheConfig.CACHE_MANAGER,
                 value = CacheConfig.CACHE_USER,
@@ -68,4 +70,11 @@ public class UserService {
                 value = CacheConfig.CACHE_USER,
                 key = "#id")
     public void evictCache(final Long id) {}
+
+    public String verifyCacheExists() {
+        if (Boolean.TRUE.equals(redisTemplate.hasKey(CacheConfig.CACHE_TASK + "::1"))) {
+            return "Deu bom";
+        }
+        return "Deu ruim";
+    }
 }
