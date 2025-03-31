@@ -45,7 +45,7 @@ public class AuthenticationService {
             final User user = userOptional.get();
             final Set<Role> roles = user.getRoles();
             return roles.stream()
-                    .allMatch(role -> role.getAuthority()
+                    .anyMatch(role -> role.getAuthority()
                             .equals("ADMIN"));
         }
         return false;
